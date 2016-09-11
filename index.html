@@ -1,0 +1,39 @@
+<head>
+	<title>AIDS</title>
+	<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+	<script>
+		var socket = io("13.94.240.176:1337");
+	</script>
+</head>
+
+steam auth:
+
+<input type='text' id='genSteamCode' /><button id='buttonSteamCode'>Generate auth</button> <a href='#saveCode' id='genSteamSave'>save key</a> | <a href='#loadCode' id='genSteamLoad'>load key</a>
+<div id='genAuthCode'></div>
+
+<script>
+	$('#buttonSteamCode').click(function() {
+		socket.emit('getauthcode', $('#genSteamCode').val());
+	});
+	
+	socket.on('return_AuthCode', function(authCode) {
+		$('#genAuthCode').html(authCode);
+	});
+	
+	$('#genSteamSave').click(function() {
+		SaveData("secretString", $('#genSteamCode').val());
+	});
+	
+	$('#genSteamLoad').click(function() {
+		$('#genSteamCode').val(LoadData("secretString"));
+	});
+	
+	function SaveData(key, item) {
+		localStorage.setItem(key, item);
+	}
+	
+	function LoadData(key) {
+		return localStorage.getItem(key);
+	}
+</script>
